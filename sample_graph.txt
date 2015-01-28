@@ -45,13 +45,13 @@ adder8[s] -> output[pin0]
     [c1 xor]
     [c2 and]
 
-    c1[o] => self[s]
-    self[a] => c1[a]
-    self[b] => c1[b]
+    c1[o] -> self[s]
+    self[a] -> c1[a]
+    self[b] -> c1[b]
 
-    c2[o] => self[c]
-    self[a] => c2[a]
-    self[b] => c2[b]
+    c2[o] -> self[c]
+    self[a] -> c2[a]
+    self[b] -> c2[b]
 }
 
 <two_bit_adder [a1, b1, a2, b2, cin] [a, b, cout]> {
@@ -77,17 +77,17 @@ adder8[s] -> output[pin0]
     [ander and]
     [xorer xor]
 
-    self[a] => ha[a]
-    self[b] => ha[b]
+    self[a] -> ha[a]
+    self[b] -> ha[b]
     ha[c] -> orer[b]
 
     ander[a] -> ha[s]
-    self[cin] => ander[b]
+    self[cin] -> ander[b]
     ander[o] -> orer[a]
 
-    orer[o] => self[cout]
+    orer[o] -> self[cout]
 
     ha[s] -> xorer[a]
-    self[cin] => xorer[b]
-    xorer[o] => self[s]
+    self[cin] -> xorer[b]
+    xorer[o] -> self[s]
 }

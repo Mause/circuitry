@@ -130,18 +130,12 @@ def parse_connection(string):
     from_, from_jack = parse_connection_end(string)
 
     whitespace(string)
-
-    conn_type = string.read(2)
-    assert conn_type in {'->', '=>'}
-
+    assert string.read(2) == '->'
     whitespace(string)
 
     to_, to_jack = parse_connection_end(string)
 
-    return Cable(
-        from_, from_jack, to_, to_jack,
-        custom_component_connection=conn_type == '=>'
-    )
+    return Cable(from_, from_jack, to_, to_jack)
 
 
 def parse_comment(string):
