@@ -2,24 +2,24 @@
 [[adder1, adder2, adder3, adder4, adder5, adder6, adder7, adder8] full_adder]
 
 # connect the first input
-input1[pin0] -> adder1[a]
-input1[pin1] -> adder2[a]
-input1[pin2] -> adder3[a]
-input1[pin3] -> adder4[a]
-input1[pin4] -> adder5[a]
-input1[pin5] -> adder6[a]
-input1[pin6] -> adder7[a]
-input1[pin7] -> adder8[a]
+input1[pin0] -> adder8[a]
+input1[pin1] -> adder7[a]
+input1[pin2] -> adder6[a]
+input1[pin3] -> adder5[a]
+input1[pin4] -> adder4[a]
+input1[pin5] -> adder3[a]
+input1[pin6] -> adder2[a]
+input1[pin7] -> adder1[a]
 
 # connect the second input
-input2[pin0] -> adder1[b]
-input2[pin1] -> adder2[b]
-input2[pin2] -> adder3[b]
-input2[pin3] -> adder4[b]
-input2[pin4] -> adder5[b]
-input2[pin5] -> adder6[b]
-input2[pin6] -> adder7[b]
-input2[pin7] -> adder8[b]
+input2[pin0] -> adder8[b]
+input2[pin1] -> adder7[b]
+input2[pin2] -> adder6[b]
+input2[pin3] -> adder5[b]
+input2[pin4] -> adder4[b]
+input2[pin5] -> adder3[b]
+input2[pin6] -> adder2[b]
+input2[pin7] -> adder1[b]
 
 # connect the carry lines of the adders
 adder1[cout] -> adder2[cin]
@@ -31,14 +31,14 @@ adder6[cout] -> adder7[cin]
 adder7[cout] -> adder8[cin]
 
 # connect the output lines
-adder1[s] -> output[pin0]
-adder2[s] -> output[pin1]
-adder3[s] -> output[pin2]
-adder4[s] -> output[pin3]
-adder5[s] -> output[pin4]
-adder6[s] -> output[pin5]
-adder7[s] -> output[pin6]
-adder8[s] -> output[pin7]
+adder1[s] -> output[pin7]
+adder2[s] -> output[pin6]
+adder3[s] -> output[pin5]
+adder4[s] -> output[pin4]
+adder5[s] -> output[pin3]
+adder6[s] -> output[pin2]
+adder7[s] -> output[pin1]
+adder8[s] -> output[pin0]
 
 
 <half_adder [a,b] [c,s]> {
