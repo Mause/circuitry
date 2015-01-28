@@ -24,37 +24,27 @@ class Graph():
         )
 
     def build_instance(self):
-        inst = BuiltGraph(self)
-        return inst.build()
+        return build_graph(
+            self.componentdeclaration,
+            self.connector
+        )
 
 
-class BuiltGraph():
-    def __init__(self, ref):
-        self.ref = ref
-        self.built = False
-        self.graph = {}  # a dict of top level components
+def build_graph(componentdeclaration, connector, base=None):
+    graph = (base or {})  # a dict of top level components
 
-    def build(self):
-        if not self.built:
-            self.build_()
-            self.built = True
+    for item in componentdeclaration:
+        graph[item.name] = item.resolve_implementation()
 
-        return self
+    for conn in connector:
+        to_ = graph[conn.to_]
 
-    def build_(self):
-        for item in self.ref.componentdeclaration:
-            self.graph[item.name] = item.resolve_implementation()
+        graph[conn.from_].connect(
+            conn.from_,
+            conn.from_jack, conn.to_jack, to_
+        )
 
-        for conn in self.ref.connector:
-            to_ = self.graph[conn.to_]
-
-            self.graph[conn.from_].connect(
-                conn.from_,
-                conn.from_jack, conn.to_jack, to_
-            )
-
-    def __getitem__(self, name):
-        return self.graph[name]
+    return graph
 
 
 def classify_component(thing):

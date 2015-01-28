@@ -109,13 +109,14 @@ class CustomComponentImplementation(Connectable):
         self.reference = reference
         super().__init__(name)
 
-        from graph import BuiltGraph
+        # avoid import loop
+        from graph import build_graph
+        self.graph = build_graph(
+            self.reference.graph['componentdeclaration'],
+            self.reference.graph['connector'],
+            {'self': self}
+        )
 
-        custom_component_graph = type(name + 'Graph', (), self.reference.graph)
-        self.graph = BuiltGraph(custom_component_graph())
-        self.graph.graph['self'] = self
-
-        self.graph.build()
         assert self.reference.inputs != self.reference.outputs
 
     @property
