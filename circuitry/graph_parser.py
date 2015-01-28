@@ -22,7 +22,7 @@ def get_pos(string):
 
 
 def expect(string, expected):
-    actual = string.pop()
+    actual = string.read(len(expected))
 
     if actual == expected:
         return
@@ -130,7 +130,7 @@ def parse_connection(string):
     from_, from_jack = parse_connection_end(string)
 
     whitespace(string)
-    assert string.read(2) == '->'
+    expect(string, '->')
     whitespace(string)
 
     to_, to_jack = parse_connection_end(string)
