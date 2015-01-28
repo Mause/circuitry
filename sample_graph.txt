@@ -1,0 +1,93 @@
+[[input1, input2, output] header]
+[[adder1, adder2, adder3, adder4, adder5, adder6, adder7, adder8] full_adder]
+
+# connect the first input
+input1[pin0] -> adder1[a]
+input1[pin1] -> adder2[a]
+input1[pin2] -> adder3[a]
+input1[pin3] -> adder4[a]
+input1[pin4] -> adder5[a]
+input1[pin5] -> adder6[a]
+input1[pin6] -> adder7[a]
+input1[pin7] -> adder8[a]
+
+# connect the second input
+input2[pin0] -> adder1[b]
+input2[pin1] -> adder2[b]
+input2[pin2] -> adder3[b]
+input2[pin3] -> adder4[b]
+input2[pin4] -> adder5[b]
+input2[pin5] -> adder6[b]
+input2[pin6] -> adder7[b]
+input2[pin7] -> adder8[b]
+
+# connect the carry lines of the adders
+adder1[cout] -> adder2[cin]
+adder2[cout] -> adder3[cin]
+adder3[cout] -> adder4[cin]
+adder4[cout] -> adder5[cin]
+adder5[cout] -> adder6[cin]
+adder6[cout] -> adder7[cin]
+adder7[cout] -> adder8[cin]
+
+# connect the output lines
+adder1[s] -> output[pin0]
+adder2[s] -> output[pin1]
+adder3[s] -> output[pin2]
+adder4[s] -> output[pin3]
+adder5[s] -> output[pin4]
+adder6[s] -> output[pin5]
+adder7[s] -> output[pin6]
+adder8[s] -> output[pin7]
+
+
+<half_adder [a,b] [c,s]> {
+    [c1 xor]
+    [c2 and]
+
+    c1[o] => self[s]
+    self[a] => c1[a]
+    self[b] => c1[b]
+
+    c2[o] => self[c]
+    self[a] => c2[a]
+    self[b] => c2[b]
+}
+
+<two_bit_adder [a1, b1, a2, b2, cin] [a, b, cout]> {
+    [[adder1, adder2] full_adder]
+
+    self[a1] -> adder1[a]
+    self[b1] -> adder1[b]
+
+    self[cin] -> adder1[cin]
+    adder1[cout] -> adder2[cin]
+    adder2[cout] -> self[cout]
+
+    self[a2] -> adder1[a]
+    self[b2] -> adder2[b]
+
+    adder1[s] -> self[a]
+    adder2[s] -> self[b]
+}
+
+<full_adder [a,b,cin] [s,cout]> {
+    [ha half_adder]
+    [orer or]
+    [ander and]
+    [xorer xor]
+
+    self[a] => ha[a]
+    self[b] => ha[b]
+    ha[c] -> orer[b]
+
+    ander[a] -> ha[s]
+    self[cin] => ander[b]
+    ander[o] -> orer[a]
+
+    orer[o] => self[cout]
+
+    ha[s] -> xorer[a]
+    self[cin] => xorer[b]
+    xorer[o] => self[s]
+}
