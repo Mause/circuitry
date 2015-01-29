@@ -16,3 +16,5 @@ class ConnectableRegistry():
         inst = cls.instance()
 
         inst.registry[klass_to_register.ttype] = klass_to_register
+
+        return klass_to_register
