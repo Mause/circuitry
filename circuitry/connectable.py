@@ -40,6 +40,10 @@ class Connectable():
         """
         connect(self, output_j, cable, input_j)
 
+    def set_plugs(self, **kw):
+        for plug, state in kw.items():
+            self.set_plug(plug, state)
+
     def set_plug(self, plug, state):
         for conn in self.connections[plug]:
             conn.cable.set_plug(conn.plug, state)
