@@ -116,7 +116,12 @@ def parse_connection_end(string):
     whitespace(string)
     expect(string, '[')
     whitespace(string)
-    jack = parse_ident(string)
+
+    if string.peek() == '[':
+        jack = parse_ident_list(string)
+    else:
+        jack = [parse_ident(string)]
+
     whitespace(string)
     expect(string, ']')
     whitespace(string)
@@ -135,7 +140,12 @@ def parse_connection(string):
 
     to_, to_jack = parse_connection_end(string)
 
-    return Cable(from_, from_jack, to_, to_jack)
+    assert len(from_jack) == len(to_jack)
+
+    return [
+        Cable(from_, sub_from_jack, to_, sub_to_jack)
+        for sub_from_jack, sub_to_jack in zip(from_jack, to_jack)
+    ]
 
 
 def parse_comment(string):
@@ -172,7 +182,7 @@ def parse_(string, root=False):
             parse_comment(string)
 
         elif token in ascii_letters:
-            nodes.append(parse_connection(string))
+            nodes.extend(parse_connection(string))
 
         whitespace(string)
 
