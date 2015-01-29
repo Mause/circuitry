@@ -33,6 +33,9 @@ class Connectable():
             0
         )
 
+    def get_outputs(self):
+        return tuple(self.state[key] for key in self.valid_outputs)
+
     def render_connect(self, output_j, input_j, cable):
         ...
         # print('{}[{}] -> {}[{}]'.format(

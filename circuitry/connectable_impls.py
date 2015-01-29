@@ -28,6 +28,12 @@ class HeaderConnectable(Connectable):
         assert state in {0, 1}
         self.set_plug(self.get_pin_name(i), state)
 
+    def get_num(self):
+        bits = map(self.get_pin, range(self.bits))
+        bits = map(str, bits)
+
+        return int(''.join(bits), 2)
+
     def set_num(self, num):
         for i in range(self.bits):
             q = (num >> i) & 1

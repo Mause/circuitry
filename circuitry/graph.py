@@ -10,7 +10,11 @@ class Graph():
                  componentdeclaration=None):
         self.connector = connector or []
         self.customcomponent = customcomponent or []
+        self.d_customcomponent = {c.ttype: c for c in self.customcomponent}
         self.componentdeclaration = componentdeclaration or []
+
+    def get_custom(self, ttype):
+        return self.d_customcomponent.get(ttype)
 
     def __repr__(self):
         return (
