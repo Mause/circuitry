@@ -47,7 +47,7 @@ class HasDynamicStateMixin:
 
 
 @ConnectableRegistry.register
-class AndConnectable(Connectable):
+class AndConnectable(HasDynamicStateMixin, Connectable):
     ttype = 'and'
 
     valid_inputs = ['a', 'b']
@@ -56,20 +56,9 @@ class AndConnectable(Connectable):
     def calc_state(self):
         return self.state['a'] and self.state['b']
 
-    def set_plug(self, plug, state):
-        assert plug in self.valid_inputs
-
-        old_state = self.calc_state()
-
-        super().set_plug(plug, state)
-
-        new_state = self.calc_state()
-        if new_state != old_state:
-            super().set_plug('o', state)
-
 
 @ConnectableRegistry.register
-class XORConnectable(Connectable):
+class XORConnectable(HasDynamicStateMixin, Connectable):
     ttype = 'xor'
     valid_inputs = ['a', 'b']
     valid_outputs = ['o']
@@ -77,37 +66,15 @@ class XORConnectable(Connectable):
     def calc_state(self):
         return gates.xor(self.state['a'], self.state['b'])
 
-    def set_plug(self, plug, state):
-        assert plug in self.valid_inputs
-
-        old_state = self.calc_state()
-
-        super().set_plug(plug, state)
-
-        new_state = self.calc_state()
-        if old_state != new_state:
-            super().set_plug('o', new_state)
-
 
 @ConnectableRegistry.register
-class OrConnectable(Connectable):
+class OrConnectable(HasDynamicStateMixin, Connectable):
     ttype = 'or'
     valid_inputs = ['a', 'b']
     valid_outputs = ['o']
 
     def calc_state(self):
         return self.state['a'] or self.state['b']
-
-    def set_plug(self, plug, state):
-        assert plug in self.valid_inputs
-
-        old_state = self.calc_state()
-
-        super().set_plug(plug, state)
-
-        new_state = self.calc_state()
-        if old_state != new_state:
-            super().set_plug('o', new_state)
 
 
 class ComponentDeclaration():
