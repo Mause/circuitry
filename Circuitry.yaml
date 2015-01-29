@@ -1,0 +1,50 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: Circuitry
+scopeName: source.circuitry
+fileTypes: [cir]
+uuid: 88278c9f-17f6-47f2-8eec-673c66f756c3
+
+patterns:
+- include: '#comment'
+- include: '#custom_component'
+- include: '#connection'
+- include: '#component_declaration'
+
+
+repository:
+  comment:
+    match: (?:^ *|\G *| +)((#).*)
+    captures:
+      '1': {name: comment.line.circuitry}
+      '2': {name: punctuation.definition.comment.line.circuitry}
+
+  component_declaration:
+    match: \[([A-Za-z_0-9]+|\[(?:[A-Za-z_0-9]+,?\s*)+\])\s+[A-Za-z_0-9]+\]
+    captures:
+      '1': {name: variable.other.circuitry}
+      '2': {name: entity.name.type.component.circuitry}
+
+  custom_component:
+    match: (?:<([A-Za-z_0-9]+) (\[(?:\w+,?\s*)+\]) (\[(?:\w+,?\s*)+\])>)
+    captures:
+      '1': {name: entity.name.type.component.circuitry}
+      '2': {name: language.parameter.circuitry}
+      '3': {name: language.parameter.circuitry}
+
+  connection:
+    match: (?:(self)|(\w+))\[(\w+|(?:\[(?:\w+,?\s*)+\]))\] (->) (?:(self)|(\w+))\[(\w+|(?:\[(?:\w+,?\s*)+\]))\]
+    captures:
+      '1': {name: variable.language.circuitry}  # self
+      '2': {name: variable.other.circuitry}     # normal ident
+
+      '3': {name: language.parameter.circuitry} # jacks
+
+      '4': {name: keyword.operator.assignment.circuitry}  # ->
+
+      '5': {name: variable.language.circuitry}  # self
+      '6': {name: variable.other.circuitry}     # normal ident
+
+      '7': {name: language.parameter.circuitry} # jacks
+
+...
