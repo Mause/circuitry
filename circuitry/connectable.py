@@ -53,6 +53,7 @@ class Connectable():
             self.set_plug(plug, state)
 
     def set_plug(self, plug, state):
+        assert state in {0, 1}
         for conn in self.connections[plug]:
             conn.cable.set_plug(conn.plug, state)
 
