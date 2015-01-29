@@ -8,12 +8,12 @@ from .exceptions import NoSuchComponentType
 @ConnectableRegistry.register
 class HeaderConnectable(Connectable):
     ttype = 'header'
-    valid_plugs = property(lambda self: [
-        self.get_pin_name(x) for x in range(self.bits)
-    ])
-    valid_inputs = valid_outputs = valid_plugs
 
     def __init__(self, name, args):
+        self.valid_inputs = self.valid_outputs = [
+            self.get_pin_name(x) for x in range(self.bits)
+        ]
+
         self.bits = int(args[0]) if args else 8
         super().__init__(name, args)
 
