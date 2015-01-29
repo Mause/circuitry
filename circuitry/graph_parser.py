@@ -4,6 +4,7 @@ from string import ascii_letters, digits
 from .connectable_impls import CustomComponent, ComponentDeclaration
 from .connector import Cable
 from .util import PopableWrapper
+from .exceptions import GraphSyntaxError
 
 VALID_IDENT = ascii_letters + digits + '_'
 
@@ -31,12 +32,7 @@ def expect(string, expected):
     if actual == expected:
         return
 
-    line, column = get_pos(string)
-    msg = 'Expected "{}", found "{}" at line {}, column {}'.format(
-        expected, actual, line, column
-    )
-
-    raise Exception(msg)
+    raise GraphSyntaxError(expected, actual, get_pos(string))
 
 
 def whitespace(string):

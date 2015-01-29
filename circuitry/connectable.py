@@ -1,10 +1,14 @@
 from collections import namedtuple
 
+from .exceptions import NoSuchPlug
 
 Conn = namedtuple('Conn', 'cable,plug')
 
 
 def connect(recieving, recieving_j, dest, dest_j):
+    if recieving_j not in recieving.connections:
+        raise NoSuchPlug(recieving_j, recieving.name, recieving.ttype)
+
     recieving.connections[recieving_j].append(
         Conn(dest, dest_j)
     )

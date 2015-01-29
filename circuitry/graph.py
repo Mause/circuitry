@@ -2,6 +2,7 @@ from itertools import groupby
 
 from .connectable_registry import ConnectableRegistry
 from .graph_parser import parse
+from .exceptions import NoSuchComponentInScope
 
 
 class Graph():
@@ -28,15 +29,6 @@ class Graph():
         )
 
 
-def not_in_graph(name, pos):
-    print(pos, ...)
-    raise Exception(
-        'No such component in scope as "{}". '
-        'line {}, column {}'
-        .format(name, pos.line, pos.column)
-    )
-
-
 def build_graph(componentdeclaration, connector, base=None):
     graph = (base or {})  # a dict of top level components
 
@@ -45,10 +37,10 @@ def build_graph(componentdeclaration, connector, base=None):
 
     for conn in connector:
         if conn.to_ not in graph:
-            not_in_graph(conn.to_, conn.pos)
+            raise NoSuchComponentInScope(conn.to_, conn.pos)
 
         elif conn.from_ not in graph:
-            not_in_graph(conn.from_, conn.pos)
+            raise NoSuchComponentInScope(conn.from_, conn.pos)
 
         graph[conn.from_].connect(
             conn.from_,

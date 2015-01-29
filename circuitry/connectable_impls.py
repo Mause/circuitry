@@ -2,6 +2,7 @@
 from . import gates
 from .connectable import Connectable
 from .connectable_registry import ConnectableRegistry
+from .exceptions import NoSuchComponentType
 
 
 @ConnectableRegistry.register
@@ -88,11 +89,7 @@ class ComponentDeclaration():
         registry = ConnectableRegistry.instance().registry
 
         if self.ttype not in registry:
-            raise Exception(
-                'No such component type as "{}". '
-                'line {}, column {}'
-                .format(self.ttype, self.pos.line, self.pos.column)
-            )
+            raise NoSuchComponentType(self.ttype, self.pos)
 
         impl = registry[self.ttype]
 
