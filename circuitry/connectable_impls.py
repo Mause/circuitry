@@ -6,8 +6,28 @@ from connectable_registry import ConnectableRegistry
 @ConnectableRegistry.register
 class HeaderConnectable(Connectable):
     ttype = 'header'
-    valid_plugs = ['pin{}'.format(x) for x in range(8)]
+    valid_plugs = property(lambda self: [
+        self.get_pin_name(x) for x in range(8)
+    ])
     valid_inputs = valid_outputs = valid_plugs
+
+    @staticmethod
+    def get_pin_name(i):
+        return 'pin{}'.format(i)
+
+    def get_pin(self, i):
+        return self.state[self.get_pin_name(i)]
+
+    def set_pin(self, i, state):
+        assert state in {0, 1}
+        self.set_plug(self.get_pin_name(i), state)
+
+    def set_num(self, num):
+        for i in range(8):
+            q = (num >> i) & 1
+            assert q in {0, 1}
+
+            self.set_pin(i, q)
 
 
 @ConnectableRegistry.register
