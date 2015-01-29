@@ -102,10 +102,13 @@ def parse_component_definition(string):
     whitespace(string)
     ttype = parse_ident(string)
     assert name and ttype, (name, ttype)
+
+    whitespace(string)
+    args = parse_ident_list(string) if string.peek() == '[' else []
     expect(string, ']')
 
     return [
-        ComponentDeclaration(sub_name, ttype, pos)
+        ComponentDeclaration(sub_name, ttype, pos, args=args)
         for sub_name in name
     ]
 

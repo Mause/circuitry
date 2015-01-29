@@ -9,9 +9,13 @@ from .exceptions import NoSuchComponentType
 class HeaderConnectable(Connectable):
     ttype = 'header'
     valid_plugs = property(lambda self: [
-        self.get_pin_name(x) for x in range(8)
+        self.get_pin_name(x) for x in range(self.bits)
     ])
     valid_inputs = valid_outputs = valid_plugs
+
+    def __init__(self, name, args):
+        self.bits = int(args[0]) if args else 8
+        super().__init__(name, args)
 
     @staticmethod
     def get_pin_name(i):
@@ -25,7 +29,7 @@ class HeaderConnectable(Connectable):
         self.set_plug(self.get_pin_name(i), state)
 
     def set_num(self, num):
-        for i in range(8):
+        for i in range(self.bits):
             q = (num >> i) & 1
             assert q in {0, 1}
 
@@ -80,10 +84,11 @@ class OrConnectable(HasDynamicStateMixin, Connectable):
 
 
 class ComponentDeclaration():
-    def __init__(self, name, ttype, pos):
+    def __init__(self, name, ttype, pos, args):
         self.name = name
         self.ttype = ttype
         self.pos = pos
+        self.args = args
 
     def resolve_implementation(self):
         registry = ConnectableRegistry.instance().registry
@@ -94,10 +99,10 @@ class ComponentDeclaration():
         impl = registry[self.ttype]
 
         if isinstance(impl, CustomComponent):
-            return CustomComponentImplementation(self.name, impl)
+            return CustomComponentImplementation(self.name, impl, self.args)
 
         else:
-            return impl(self.name)
+            return impl(self.name, self.args)
 
 
 class CustomComponent():
@@ -116,9 +121,9 @@ class CustomComponent():
 
 
 class CustomComponentImplementation(Connectable):
-    def __init__(self, name, reference):
+    def __init__(self, name, reference, args):
         self.reference = reference
-        super().__init__(name)
+        super().__init__(name, args)
 
         # avoid import loop
         from .graph import build_graph

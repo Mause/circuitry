@@ -15,8 +15,9 @@ def connect(recieving, recieving_j, dest, dest_j):
 
 
 class Connectable():
-    def __init__(self, name):
+    def __init__(self, name, args):
         self.name = name
+        self.args = args
         self.reset_state()
         self.reset_connections()
 
