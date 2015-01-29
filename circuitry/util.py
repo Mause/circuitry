@@ -1,3 +1,4 @@
+from collections import UserDict
 
 
 class PopableWrapper():
@@ -27,3 +28,9 @@ class PopableWrapper():
 
     def __repr__(self):
         return '<PopableWrapper {}>'.format(repr(self.string[self.idx:]))
+
+
+class StateDict(UserDict):
+    def __setitem__(self, name, val):
+        assert val in {0, 1}
+        super().__setitem__(name, val)

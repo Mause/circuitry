@@ -1,5 +1,6 @@
 from collections import namedtuple
 
+from .util import StateDict
 from .exceptions import NoSuchPlug
 
 Conn = namedtuple('Conn', 'cable,plug')
@@ -32,7 +33,7 @@ class Connectable():
         }
 
     def reset_state(self):
-        self.state = dict.fromkeys(
+        self.state = StateDict.fromkeys(
             self.valid_inputs + self.valid_outputs,
             0
         )
