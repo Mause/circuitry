@@ -75,12 +75,22 @@ class OrConnectable(Connectable):
 
 
 class ComponentDeclaration():
-    def __init__(self, name, ttype):
+    def __init__(self, name, ttype, pos):
         self.name = name
         self.ttype = ttype
+        self.pos = pos
 
     def resolve_implementation(self):
-        impl = ConnectableRegistry.instance().registry[self.ttype]
+        registry = ConnectableRegistry.instance().registry
+
+        if self.ttype not in registry:
+            raise Exception(
+                'No such component type as "{}". '
+                'line {}, column {}'
+                .format(self.ttype, self.pos.line, self.pos.column)
+            )
+
+        impl = registry[self.ttype]
 
         if isinstance(impl, CustomComponent):
             return CustomComponentImplementation(self.name, impl)

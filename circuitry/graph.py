@@ -30,6 +30,15 @@ class Graph():
         )
 
 
+def not_in_graph(name, pos):
+    print(pos, ...)
+    raise Exception(
+        'No such component in scope as "{}". '
+        'line {}, column {}'
+        .format(name, pos.line, pos.column)
+    )
+
+
 def build_graph(componentdeclaration, connector, base=None):
     graph = (base or {})  # a dict of top level components
 
@@ -37,11 +46,15 @@ def build_graph(componentdeclaration, connector, base=None):
         graph[item.name] = item.resolve_implementation()
 
     for conn in connector:
-        to_ = graph[conn.to_]
+        if conn.to_ not in graph:
+            not_in_graph(conn.to_, conn.pos)
+
+        elif conn.from_ not in graph:
+            not_in_graph(conn.from_, conn.pos)
 
         graph[conn.from_].connect(
             conn.from_,
-            conn.from_jack, conn.to_jack, to_
+            conn.from_jack, conn.to_jack, graph[conn.to_]
         )
 
     return graph

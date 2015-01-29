@@ -1,3 +1,4 @@
+from collections import namedtuple
 from string import ascii_letters, digits
 
 from connectable_impls import CustomComponent, ComponentDeclaration
@@ -5,6 +6,9 @@ from connector import Cable
 from util import PopableWrapper
 
 VALID_IDENT = ascii_letters + digits + '_'
+
+
+Pos = namedtuple('Pos', 'line,column')
 
 
 def get_pos(string):
@@ -18,7 +22,7 @@ def get_pos(string):
     else:
         column = pos - column - 1
 
-    return (line, column)
+    return Pos(line, column)
 
 
 def expect(string, expected):
@@ -88,6 +92,8 @@ def parse_custom_component(string):
 
 
 def parse_component_definition(string):
+    pos = get_pos(string)
+
     expect(string, '[')
 
     if string.peek() == '[':
@@ -104,11 +110,11 @@ def parse_component_definition(string):
 
     if isinstance(name, list):
         return [
-            ComponentDeclaration(sub_name, ttype)
+            ComponentDeclaration(sub_name, ttype, pos)
             for sub_name in name
         ]
     else:
-        return [ComponentDeclaration(name, ttype)]
+        return [ComponentDeclaration(name, ttype, pos)]
 
 
 def parse_connection_end(string):
@@ -132,6 +138,8 @@ def parse_connection_end(string):
 
 
 def parse_connection(string):
+    pos = get_pos(string)
+
     from_, from_jack = parse_connection_end(string)
 
     whitespace(string)
@@ -143,7 +151,7 @@ def parse_connection(string):
     assert len(from_jack) == len(to_jack)
 
     return [
-        Cable(from_, sub_from_jack, to_, sub_to_jack)
+        Cable(from_, sub_from_jack, to_, sub_to_jack, pos)
         for sub_from_jack, sub_to_jack in zip(from_jack, to_jack)
     ]
 
