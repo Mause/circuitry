@@ -30,6 +30,22 @@ class HeaderConnectable(Connectable):
             self.set_pin(i, q)
 
 
+class HasDynamicStateMixin:
+    def calc_state(self):
+        raise NotImplementedError()
+
+    def set_plug(self, plug, state):
+        assert plug in self.valid_inputs
+
+        old_state = self.calc_state()
+
+        super().set_plug(plug, state)
+
+        new_state = self.calc_state()
+        if old_state != new_state:
+            super().set_plug('o', new_state)
+
+
 @ConnectableRegistry.register
 class AndConnectable(Connectable):
     ttype = 'and'
