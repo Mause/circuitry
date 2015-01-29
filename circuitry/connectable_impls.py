@@ -55,7 +55,7 @@ class AndConnectable(HasDynamicStateMixin, Connectable):
     valid_outputs = ['o']
 
     def calc_state(self):
-        return self.state['a'] and self.state['b']
+        return int(self.state['a'] and self.state['b'])
 
 
 @ConnectableRegistry.register
@@ -65,7 +65,7 @@ class XORConnectable(HasDynamicStateMixin, Connectable):
     valid_outputs = ['o']
 
     def calc_state(self):
-        return gates.xor(self.state['a'], self.state['b'])
+        return int(gates.xor(self.state['a'], self.state['b']))
 
 
 @ConnectableRegistry.register
@@ -75,7 +75,7 @@ class OrConnectable(HasDynamicStateMixin, Connectable):
     valid_outputs = ['o']
 
     def calc_state(self):
-        return self.state['a'] or self.state['b']
+        return int(self.state['a'] or self.state['b'])
 
 
 class ComponentDeclaration():
