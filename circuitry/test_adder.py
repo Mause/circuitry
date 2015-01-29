@@ -1,7 +1,7 @@
 import unittest
 
-from graph import load_graph
-from connectable_impls import CustomComponentImplementation
+from .graph import load_graph
+from .connectable_impls import CustomComponentImplementation
 
 with open('sample_graph.txt') as fh:
     SAMPLE_GRAPH = load_graph(fh.read())

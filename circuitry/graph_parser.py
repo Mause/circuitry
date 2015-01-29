@@ -1,9 +1,9 @@
 from collections import namedtuple
 from string import ascii_letters, digits
 
-from connectable_impls import CustomComponent, ComponentDeclaration
-from connector import Cable
-from util import PopableWrapper
+from .connectable_impls import CustomComponent, ComponentDeclaration
+from .connector import Cable
+from .util import PopableWrapper
 
 VALID_IDENT = ascii_letters + digits + '_'
 

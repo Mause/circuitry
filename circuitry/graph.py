@@ -1,9 +1,7 @@
 from itertools import groupby
-from collections import defaultdict
 
-from adder import split, rejoin
-from connectable_registry import ConnectableRegistry
-from graph_parser import parse
+from .connectable_registry import ConnectableRegistry
+from .graph_parser import parse
 
 
 class Graph():

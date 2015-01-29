@@ -1,6 +1,7 @@
-import gates
-from connectable import Connectable
-from connectable_registry import ConnectableRegistry
+
+from . import gates
+from .connectable import Connectable
+from .connectable_registry import ConnectableRegistry
 
 
 @ConnectableRegistry.register
@@ -123,7 +124,7 @@ class CustomComponentImplementation(Connectable):
         super().__init__(name)
 
         # avoid import loop
-        from graph import build_graph
+        from .graph import build_graph
         self.graph = build_graph(
             self.reference.graph['componentdeclaration'],
             self.reference.graph['connector'],
