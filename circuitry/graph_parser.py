@@ -101,20 +101,17 @@ def parse_component_definition(string):
         name = parse_ident_list(string)
 
     else:
-        name = parse_ident(string)
+        name = [parse_ident(string)]
 
     whitespace(string)
     ttype = parse_ident(string)
     assert name and ttype, (name, ttype)
     expect(string, ']')
 
-    if isinstance(name, list):
-        return [
-            ComponentDeclaration(sub_name, ttype, pos)
-            for sub_name in name
-        ]
-    else:
-        return [ComponentDeclaration(name, ttype, pos)]
+    return [
+        ComponentDeclaration(sub_name, ttype, pos)
+        for sub_name in name
+    ]
 
 
 def parse_connection_end(string):
