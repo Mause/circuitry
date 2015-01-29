@@ -102,13 +102,7 @@ class ComponentDeclaration():
         if self.ttype not in registry:
             raise NoSuchComponentType(self.ttype, self.pos)
 
-        impl = registry[self.ttype]
-
-        if isinstance(impl, CustomComponent):
-            return CustomComponentImplementation(self.name, impl, self.args)
-
-        else:
-            return impl(self.name, self.args)
+        return registry[self.ttype].build(self.name, self.args)
 
 
 class CustomComponent():
@@ -124,6 +118,9 @@ class CustomComponent():
             ','.join(self.inputs),
             ','.join(self.outputs)
         )
+
+    def build(self, name, args):
+        return CustomComponentImplementation(name, self, args)
 
 
 class CustomComponentImplementation(Connectable):

@@ -21,6 +21,10 @@ class Connectable():
         self.reset_state()
         self.reset_connections()
 
+    @classmethod
+    def build(cls, name, args):
+        return cls(name, args)
+
     def reset_connections(self):
         self.connections = {
             k: []
