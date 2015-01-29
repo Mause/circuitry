@@ -51,6 +51,7 @@ class Connectable():
     def set_plugs(self, **kw):
         for plug, state in kw.items():
             self.set_plug(plug, state)
+        return self
 
     def set_plug(self, plug, state):
         assert state in {0, 1}
@@ -58,6 +59,7 @@ class Connectable():
             conn.cable.set_plug(conn.plug, state)
 
         self.state[plug] = state
+        return self
 
     def __repr__(self):
         return '<{}[{}] {} {} {}>'.format(
