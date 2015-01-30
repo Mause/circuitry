@@ -90,6 +90,28 @@ class OrConnectable(HasDynamicStateMixin, Connectable):
         return int(self.state['a'] or self.state['b'])
 
 
+@ConnectableRegistry.register
+class NotConnectable(HasDynamicStateMixin, Connectable):
+    ttype = 'not'
+    valid_inputs = ['a']
+    valid_outputs = ['o']
+
+    def calc_state(self):
+        return int(not self.state['a'])
+
+
+@ConnectableRegistry.register
+class NandConnectable(HasDynamicStateMixin, Connectable):
+    ttype = 'nand'
+    valid_inputs = ['a', 'b']
+    valid_outputs = ['o']
+
+    def calc_state(self):
+        a, b = self.state['a'], self.state['b']
+
+        return int(not (a and b))
+
+
 class ComponentDeclaration():
     def __init__(self, name, ttype, pos, args):
         self.name = name
