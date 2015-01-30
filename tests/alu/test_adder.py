@@ -1,9 +1,11 @@
 import unittest
+from os.path import dirname, join
+HERE = dirname(__file__)
 
-from .graph import load_graph
-from .connectable_impls import CustomComponentImplementation
+from circuitry.graph import load_graph
+from circuitry.connectable_impls import CustomComponentImplementation
 
-with open('sample_graph.txt') as fh:
+with open(join(HERE, 'adder.cir')) as fh:
     SAMPLE_GRAPH = load_graph(fh.read())
 
 customcomponent = {t.ttype: t for t in SAMPLE_GRAPH.customcomponent}
