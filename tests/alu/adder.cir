@@ -41,6 +41,22 @@ adder7[s] -> output[pin1]
 adder8[s] -> output[pin0]
 
 
+<full_adder [a,b,cin] [s,cout]> {
+    [[ha1,ha2] half_adder]
+    [orer or]
+
+    self[[a,b]] -> ha1[[a,b]]
+
+    ha1[s] -> ha2[a]
+    self[cin] -> ha2[b]
+    ha2[s] -> self[s]
+
+    ha1[c] -> orer[a]
+    ha2[c] -> orer[b]
+    orer[o] -> self[cout]
+}
+
+
 <half_adder [a,b] [c,s]> {
     [c1 xor]
     [c2 and]
@@ -50,42 +66,4 @@ adder8[s] -> output[pin0]
 
     self[[a,b]] -> c1[[a,b]]
     self[[a,b]] -> c2[[a,b]]
-}
-
-<two_bit_adder [a1, b1, a2, b2, cin] [a, b, cout]> {
-    [[adder1, adder2] full_adder]
-
-    self[a1] -> adder1[a]
-    self[b1] -> adder1[b]
-
-    self[cin] -> adder1[cin]
-    adder1[cout] -> adder2[cin]
-    adder2[cout] -> self[cout]
-
-    self[a2] -> adder1[a]
-    self[b2] -> adder2[b]
-
-    adder1[s] -> self[a]
-    adder2[s] -> self[b]
-}
-
-<full_adder [a,b,cin] [s,cout]> {
-    [ha half_adder]
-    [orer or]
-    [ander and]
-    [xorer xor]
-
-    self[[a,b]] -> ha[[a,b]]
-
-    ha[c] -> orer[b]
-
-    ander[a] -> ha[s]
-    self[cin] -> ander[b]
-    ander[o] -> orer[a]
-
-    orer[o] -> self[cout]
-
-    ha[s] -> xorer[a]
-    self[cin] -> xorer[b]
-    xorer[o] -> self[s]
 }
