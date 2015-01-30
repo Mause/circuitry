@@ -10,11 +10,12 @@ class HeaderConnectable(Connectable):
     ttype = 'header'
 
     def __init__(self, name, args):
+        self.bits = int(args[0]) if args else 8
+
         self.valid_inputs = self.valid_outputs = [
             self.get_pin_name(x) for x in range(self.bits)
         ]
 
-        self.bits = int(args[0]) if args else 8
         super().__init__(name, args)
 
     @staticmethod
