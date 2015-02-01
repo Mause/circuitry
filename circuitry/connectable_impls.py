@@ -69,6 +69,9 @@ class AndConnectable(HasDynamicStateMixin, Connectable):
     def calc_state(self):
         return int(self.state['a'] and self.state['b'])
 
+    def render_state(self):
+        return '({a} & {b} = {o})'.format_map(self.state)
+
 
 @ConnectableRegistry.register
 class XORConnectable(HasDynamicStateMixin, Connectable):
@@ -98,6 +101,9 @@ class NotConnectable(HasDynamicStateMixin, Connectable):
 
     def calc_state(self):
         return int(not self.state['a'])
+
+    def render_state(self):
+        return '(~{a} = {o})'.format_map(self.state)
 
 
 @ConnectableRegistry.register
@@ -160,6 +166,17 @@ class CustomComponentImplementation(Connectable):
         )
 
         assert self.reference.inputs != self.reference.outputs
+
+    def render_state(self):
+        render = lambda d: ' '.join(
+            '{}={}'.format(key, self.state[key])
+            for key in d
+        )
+
+        return '({} = {})'.format(
+            render(self.valid_inputs),
+            render(self.valid_outputs)
+        )
 
     @property
     def ttype(self):
