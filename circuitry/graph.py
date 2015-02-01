@@ -59,10 +59,21 @@ def classify_component(thing):
 
 
 def sort_graph(lst):
-    return {
-        k: list(v)
-        for k, v in groupby(lst, key=classify_component)
+    d = {
+        'customcomponent': [], 'componentdeclaration': [], 'connector': [],
+        'importfile': []
     }
+
+    for thing in lst:
+        klass = classify_component(thing)
+
+        if klass in d:
+            d[klass].append(thing)
+
+        else:
+            raise Exception(classify_component(thing))
+
+    return d
 
 
 def load_graph(graph):
