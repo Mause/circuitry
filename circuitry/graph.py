@@ -76,7 +76,13 @@ def sort_graph(lst):
     return d
 
 
-def load_graph(graph):
+def load_graph(*, filename, graph=None):
+    assert filename
+
+    if not graph:
+        with open(filename) as fh:
+            graph = fh.read()
+
     top_level = sort_graph(parse(graph))
 
     for cus_comp in top_level['customcomponent']:
