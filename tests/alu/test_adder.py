@@ -1,57 +1,42 @@
 import unittest
-from os.path import dirname, join
-HERE = dirname(__file__)
+from itertools import product, tee
 
-from circuitry.graph import load_graph
-from circuitry.connectable_impls import CustomComponentImplementation
+from ..utils import get_graph, build_pins, as_bin
 
-with open(join(HERE, 'adder.cir')) as fh:
-    SAMPLE_GRAPH = load_graph(fh.read())
-
-customcomponent = {t.ttype: t for t in SAMPLE_GRAPH.customcomponent}
-HALF_ADDER = customcomponent['half_adder']
-FULL_ADDER = customcomponent['full_adder']
+adder_cir = get_graph('alu/adder.cir')
+HalfAdder = adder_cir.get('half_adder')
+FullAdder = adder_cir.get('full_adder')
+EightBitAdder = adder_cir.get('eight_bit_adder')
 
 
-def sub_test_half_adder(a, b):
-    half_adder = CustomComponentImplementation('ha', HALF_ADDER)
-    half_adder.set_plug('a', a)
-    half_adder.set_plug('b', b)
-    return half_adder.state['c'], half_adder.state['s']
+def half(a, b):
+    return HalfAdder('ha').set_plugs(a=a, b=b).get_outputs()
 
 
-def sub_test_full_adder(a, b, cin):
-    adder = CustomComponentImplementation('adder', FULL_ADDER)
-    adder.set_plug('a', a)
-    adder.set_plug('b', b)
-    adder.set_plug('cin', cin)
-    return adder.state['cout'], adder.state['s']
+def full(a, b, cin):
+    return FullAdder('adder').set_plugs(a=a, b=b, cin=cin).get_outputs()[::-1]
 
 
-wrapper = lambda test_func: lambda self, args, expected: \
-    self.assertEqual(test_func(*args), expected)
+
 
 
 class TestAdder(unittest.TestCase):
-    half = wrapper(sub_test_half_adder)
-    full = wrapper(sub_test_full_adder)
-
     def test_half_adder(self):
-        self.half((0, 0), (0, 0))
-        self.half((1, 1), (1, 0))
-        self.half((1, 0), (0, 1))
-        self.half((0, 1), (0, 1))
+        self.assertEqual(half(0, 0), (0, 0))
+        self.assertEqual(half(1, 1), (1, 0))
+        self.assertEqual(half(1, 0), (0, 1))
+        self.assertEqual(half(0, 1), (0, 1))
 
     def test_full_adder(self):
-        self.full((0, 0, 0), (0, 0))
-        self.full((1, 0, 0), (0, 1))
-        self.full((0, 1, 0), (0, 1))
-        self.full((1, 1, 0), (1, 0))
-        self.full((0, 0, 1), (0, 1))
-        self.full((1, 1, 1), (1, 1))
+        self.assertEqual(full(0, 0, 0), (0, 0))
+        self.assertEqual(full(0, 0, 1), (0, 1))
+        self.assertEqual(full(0, 1, 0), (0, 1))
+        self.assertEqual(full(1, 0, 0), (0, 1))
+        self.assertEqual(full(1, 1, 0), (1, 0))
+        self.assertEqual(full(1, 1, 1), (1, 1))
+        self.assertEqual(full(0, 1, 1), (1, 0))
+        self.assertEqual(full(1, 0, 1), (1, 0))
 
-        self.full((1, 0, 1), (1, 0))
-        self.full((0, 1, 1), (1, 0))
 
 
 if __name__ == '__main__':
