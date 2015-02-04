@@ -1,7 +1,7 @@
 from itertools import groupby
 
 from .connectable_registry import ConnectableRegistry
-from .graph_parser import parse
+from .graph_parser_pp import parse as parse_pp
 from .exceptions import NoSuchComponentInScope
 
 
@@ -95,7 +95,7 @@ def load_graph(*, filename, graph=None):
         with open(filename) as fh:
             graph = fh.read()
 
-    top_level = sort_graph(parse(graph))
+    top_level = sort_graph(parse_pp(graph))
 
     for cus_comp in top_level['customcomponent']:
         cus_comp.graph = sort_graph(cus_comp.contents)
