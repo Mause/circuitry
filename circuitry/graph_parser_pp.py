@@ -8,7 +8,7 @@ from pyparsing import (
 
 from .connector import Cable
 from . import connectable_impls
-from .graph_parser import get_pos
+from .util import get_pos
 
 
 class ImportFile:
