@@ -60,6 +60,17 @@ class Connectable():
 
     def set_plug(self, plug, state):
         assert state in {0, 1}
+
+        # use a try-except, as this will never happen during normal operation
+        try:
+            self.connections[plug]
+        except KeyError:
+            raise NoSuchPlug(
+                plug,
+                self.name,
+                self.ttype
+            )
+
         for conn in self.connections[plug]:
             conn.cable.set_plug(conn.plug, state)
 
