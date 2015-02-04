@@ -1,44 +1,64 @@
-[[input1, input2, output] header]
-[[adder1, adder2, adder3, adder4, adder5, adder6, adder7, adder8] full_adder]
+[adder [] []]
+
+[[input1, input2] header]
+[output header]
+
+[adder1 eight_bit_adder]
 
 # connect the first input
-input1[pin0] -> adder8[a]
-input1[pin1] -> adder7[a]
-input1[pin2] -> adder6[a]
-input1[pin3] -> adder5[a]
-input1[pin4] -> adder4[a]
-input1[pin5] -> adder3[a]
-input1[pin6] -> adder2[a]
-input1[pin7] -> adder1[a]
+input1[[pin7,pin6,pin5,pin4,pin3,pin2,pin1,pin0]] -> adder1[[a1,b1,c1,d1,e1,f1,g1,h1]]
 
 # connect the second input
-input2[pin0] -> adder8[b]
-input2[pin1] -> adder7[b]
-input2[pin2] -> adder6[b]
-input2[pin3] -> adder5[b]
-input2[pin4] -> adder4[b]
-input2[pin5] -> adder3[b]
-input2[pin6] -> adder2[b]
-input2[pin7] -> adder1[b]
-
-# connect the carry lines of the adders
-adder1[cout] -> adder2[cin]
-adder2[cout] -> adder3[cin]
-adder3[cout] -> adder4[cin]
-adder4[cout] -> adder5[cin]
-adder5[cout] -> adder6[cin]
-adder6[cout] -> adder7[cin]
-adder7[cout] -> adder8[cin]
+input2[[pin7,pin6,pin5,pin4,pin3,pin2,pin1,pin0]] -> adder1[[a1,b1,c1,d1,e1,f1,g1,h1]]
 
 # connect the output lines
-adder1[s] -> output[pin7]
-adder2[s] -> output[pin6]
-adder3[s] -> output[pin5]
-adder4[s] -> output[pin4]
-adder5[s] -> output[pin3]
-adder6[s] -> output[pin2]
-adder7[s] -> output[pin1]
-adder8[s] -> output[pin0]
+adder1[[a,b,c,d,e,f,g,h]] -> output[[pin7,pin6,pin5,pin4,pin3,pin2,pin1,pin0]]
+
+<eight_bit_adder [a1,b1,c1,d1,e1,f1,g1,h1,
+                  a2,b2,c2,d2,e2,f2,g2,h2]
+                 [a,b,c,d,e,f,g,h,carry]> {
+    [[adder1, adder2, adder3, adder4, adder5, adder6, adder7, adder8] full_adder]
+
+    # connect the carry lines of the adders
+    adder1[cout] -> adder2[cin]
+    adder2[cout] -> adder3[cin]
+    adder3[cout] -> adder4[cin]
+    adder4[cout] -> adder5[cin]
+    adder5[cout] -> adder6[cin]
+    adder6[cout] -> adder7[cin]
+    adder7[cout] -> adder8[cin]
+    adder8[cout] -> self[carry]  # addition carry
+
+    # connect the first input
+    self[a1] -> adder8[a]
+    self[b1] -> adder7[a]
+    self[c1] -> adder6[a]
+    self[d1] -> adder5[a]
+    self[e1] -> adder4[a]
+    self[f1] -> adder3[a]
+    self[g1] -> adder2[a]
+    self[h1] -> adder1[a]
+
+    # connect the second input
+    self[a2] -> adder8[b]
+    self[b2] -> adder7[b]
+    self[c2] -> adder6[b]
+    self[d2] -> adder5[b]
+    self[e2] -> adder4[b]
+    self[f2] -> adder3[b]
+    self[g2] -> adder2[b]
+    self[h2] -> adder1[b]
+
+    # connect the output lines
+    adder1[s] -> self[a]
+    adder2[s] -> self[b]
+    adder3[s] -> self[c]
+    adder4[s] -> self[d]
+    adder5[s] -> self[e]
+    adder6[s] -> self[f]
+    adder7[s] -> self[g]
+    adder8[s] -> self[h]
+}
 
 
 <full_adder [a,b,cin] [s,cout]> {

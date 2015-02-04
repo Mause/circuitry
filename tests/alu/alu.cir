@@ -1,0 +1,43 @@
+[alu [] []]
+
+@import eight_bit_adder from adder@
+@import and_bus from and_bus@
+@import multiplexor from multiplexor@
+
+<alu [s1,s2,
+      a1,b1,c1,d1,e1,f1,g1,h1,
+      a2,b2,c2,d2,e2,f2,g2,h2]
+     [a,b,c,d,e,f,g,h,carry]> {
+
+    [mul multiplexor]
+    self[s1] -> mul[s1]
+    mul[[a,b,c,d,e,f,g,h]] -> self[[a,b,c,d,e,f,g,h]]
+
+    # different operations we can perform
+    [adder1 eight_bit_adder]
+    self[[a1,b1,c1,d1,e1,f1,g1,h1]] -> adder1[[a1,b1,c1,d1,e1,f1,g1,h1]]
+    self[[a2,b2,c2,d2,e2,f2,g2,h2]] -> adder1[[a2,b2,c2,d2,e2,f2,g2,h2]]
+    adder1[[a,b,c,d,e,f,g,h]] -> mul[[a1,b1,c1,d1,e1,f1,g1,h1]]
+    adder1[carry] -> self[carry]
+
+    [and_bus1 and_bus]
+    self[[a1,b1,c1,d1,e1,f1,g1,h1]] -> and_bus1[[a1,b1,c1,d1,e1,f1,g1,h1]]
+    self[[a2,b2,c2,d2,e2,f2,g2,h2]] -> and_bus1[[a2,b2,c2,d2,e2,f2,g2,h2]]
+    and_bus1[[a,b,c,d,e,f,g,h]] -> mul[[a2,b2,c2,d2,e2,f2,g2,h2]]
+}
+
+#<negator [sign1,a1,b1,c1,d1,e1,f1,g1,h1]
+#         [sign,a,b,c,d,e,f,g,h]> {
+#    [[not1,not2,not3,not4,not5,not6,not7,not8,not9] not]
+#
+#    # this language is not line based :P
+#    self[sign1] -> not1[a] not1[o] -> self[sign]
+#    self[a1]    -> not2[a] not2[o] -> self[a]
+#    self[b1]    -> not3[a] not3[o] -> self[b]
+#    self[c1]    -> not4[a] not4[o] -> self[c]
+#    self[d1]    -> not5[a] not5[o] -> self[d]
+#    self[e1]    -> not6[a] not6[o] -> self[e]
+#    self[f1]    -> not7[a] not7[o] -> self[f]
+#    self[g1]    -> not8[a] not8[o] -> self[g]
+#    self[h1]    -> not9[a] not9[o] -> self[h]
+#}

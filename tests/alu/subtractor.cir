@@ -1,0 +1,7 @@
+[subtractor [] []]
+
+@import full_adder from adder@
+
+<subtractor_1bit [s1,a1,s2,a2] [s,a]> {
+    [adder1 full_adder]
+}

@@ -1,0 +1,26 @@
+[and_bus [] []]
+
+<and_bus [a1,b1,c1,d1,e1,f1,g1,h1,
+          a2,b2,c2,d2,e2,f2,g2,h2]
+         [a,b,c,d,e,f,g,h]> {
+
+    [[and1,and2,and3,and4,and5,and6,and7,and8] and]
+
+    self[[a1,a2]] -> and1[[a,b]]
+    self[[b1,b2]] -> and2[[a,b]]
+    self[[c1,c2]] -> and3[[a,b]]
+    self[[d1,d2]] -> and4[[a,b]]
+    self[[e1,e2]] -> and5[[a,b]]
+    self[[f1,f2]] -> and6[[a,b]]
+    self[[g1,g2]] -> and7[[a,b]]
+    self[[h1,h2]] -> and8[[a,b]]
+
+    and1[o] -> self[a]
+    and2[o] -> self[b]
+    and3[o] -> self[c]
+    and4[o] -> self[d]
+    and5[o] -> self[e]
+    and6[o] -> self[f]
+    and7[o] -> self[g]
+    and8[o] -> self[h]
+}

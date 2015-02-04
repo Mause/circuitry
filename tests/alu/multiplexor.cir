@@ -1,0 +1,112 @@
+[multiplexor [] []]
+
+<multiplexor_1bit [s1, a, b] [o]> {
+    # when s1 is high, a is selected
+    # when s1 is low, b is selected
+    [not1 not]
+    [or1 or]
+    [[and1,and2] and]
+
+    self[s1] -> and1[a]
+    self[a] -> and1[b]
+
+    self[s1] -> not1[a]
+    not1[o] -> and2[a]
+    self[b] -> and2[b]
+
+    and1[o] -> or1[a]
+    and2[o] -> or1[b]
+    or1[o] -> self[o]
+}
+
+
+<multiplexor_2bits [s1, a1, b1, a2, b2] [a, b]> {
+    [[m1, m2] multiplexor_1bit]
+
+    self[s1] -> m1[s1]
+    self[s1] -> m2[s1]
+
+    self[[a1,a2]] -> m1[[a,b]]
+    self[[b1,b2]] -> m2[[a,b]]
+
+    m1[o] -> self[a]
+    m2[o] -> self[b]
+}
+
+
+<multiplexor_4bits [s1, a1, b1, c1, d1, a2, b2, c2, d2] [a,b,c,d]> {
+    [[m1, m2] multiplexor_2bits]
+
+    self[s1] -> m1[s1]
+    self[s1] -> m2[s1]
+
+    self[[a1,b1,a2,b2]] -> m1[[a1,b1,a2,b2]]
+    self[[c1,d1,c2,d2]] -> m2[[a1,b1,a2,b2]]
+
+    m1[[a,b]] -> self[[a,b]]
+    m2[[a,b]] -> self[[c,d]]
+}
+
+
+<multiplexor [s1,              # input selector
+              a1,b1,c1,d1,e1,f1,g1,h1, # a1 through h1 are input 1
+              a2,b2,c2,d2,e2,f2,g2,h2] # a2 through h2 are input 2
+             [a,b,c,d,e,f,g,h]> {
+
+    [[m1, m2] multiplexor_4bits]
+
+    self[s1] -> m1[s1]
+    self[s1] -> m2[s1]
+
+    self[[a1,b1,c1,d1,a2,b2,c2,d2]] -> m1[[a1,b1,c1,d1,a2,b2,c2,d2]]
+    self[[e1,f1,g1,h1,e2,f2,g2,h2]] -> m2[[a1,b1,c1,d1,a2,b2,c2,d2]]
+
+    m1[[a,b,c,d]] -> self[[a,b,c,d]]
+    m2[[a,b,c,d]] -> self[[e,f,g,h]]
+}
+
+
+# this is used to transform two inputs into three outputs
+# so we can control the three switches on a 4 output multiplexor
+<multiplexor4_selector [s1,s2] [a,b,c]> {
+    [[not1,not2] not]
+    [[and01,and02,and03] and]
+
+    self[s1] -> and01[a]
+    self[s2] -> not1[a]
+    not1[o] -> and01[b]
+    and01[o] -> self[b]
+
+    self[s1] -> not2[a]
+    self[s2] -> and02[a]
+    not2[o] -> and02[b]
+    and02[o] -> self[a]
+
+    self[[s1,s2]] -> and03[[a,b]]
+    and03[o] -> self[a]
+    and03[o] -> self[c]
+}
+
+
+<multiplexor4 [s1,s2,a,b,c,d,e,f,g,h]
+              [a1,b1,c1,d1,e1,f1,g1,h1,
+               a2,b2,c2,d2,e2,f2,g2,h2,
+               a3,b3,c3,d3,e3,f3,g3,h3,
+               a4,b4,c4,d4,e4,f4,g4,h4]> {
+    [[m1,m2,m3] multiplexor]
+    [sel multiplexor4_selector]
+
+    self[[s1,s2]] -> sel[[s1,s2]]
+    sel[a] -> m1[s1]
+    sel[b] -> m2[s1]
+    sel[c] -> m3[s1]
+
+    self[[a,b,c,d,e,f,g,h]] ->       m1[[a,b,c,d,e,f,g,h]]
+    m1[[a1,b1,c1,d1,e1,f1,g1,h1]] -> m2[[a,b,c,d,e,f,g,h]]
+    m1[[a2,b2,c2,d2,e2,f2,g2,h2]] -> m3[[a,b,c,d,e,f,g,h]]
+
+    m2[[a1,b1,c1,d1,e1,f1,g1,h1]] -> self[[a1,b1,c1,d1,e1,f1,g1,h1]]
+    m2[[a2,b2,c2,d2,e2,f2,g2,h2]] -> self[[a2,b2,c2,d2,e2,f2,g2,h2]]
+    m3[[a1,b1,c1,d1,e1,f1,g1,h1]] -> self[[a3,b3,c3,d3,e3,f3,g3,h3]]
+    m3[[a2,b2,c2,d2,e2,f2,g2,h2]] -> self[[a4,b4,c4,d4,e4,f4,g4,h4]]
+}
