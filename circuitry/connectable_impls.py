@@ -72,6 +72,9 @@ class AndConnectable(HasDynamicStateMixin, Connectable):
     def render_state(self):
         return '({a} & {b} = {o})'.format_map(self.state)
 
+    def live(self):
+        return self
+
 
 @ConnectableRegistry.register
 class XORConnectable(HasDynamicStateMixin, Connectable):
@@ -82,6 +85,9 @@ class XORConnectable(HasDynamicStateMixin, Connectable):
     def calc_state(self):
         return int(gates.xor(self.state['a'], self.state['b']))
 
+    def live(self):
+        return self
+
 
 @ConnectableRegistry.register
 class OrConnectable(HasDynamicStateMixin, Connectable):
@@ -91,6 +97,9 @@ class OrConnectable(HasDynamicStateMixin, Connectable):
 
     def calc_state(self):
         return int(self.state['a'] or self.state['b'])
+
+    def live(self):
+        return self
 
 
 @ConnectableRegistry.register
@@ -104,6 +113,14 @@ class NotConnectable(HasDynamicStateMixin, Connectable):
 
     def render_state(self):
         return '(~{a} = {o})'.format_map(self.state)
+
+    def live(self):
+        Connectable.set_plug(
+            self,
+            'o',
+            self.calc_state()
+        )
+        return self
 
 
 @ConnectableRegistry.register
@@ -166,6 +183,7 @@ class CustomComponentImplementation(Connectable):
         )
 
         assert self.reference.inputs != self.reference.outputs
+        self.lived = False
 
     def render_state(self):
         render = lambda d: ' '.join(
@@ -194,3 +212,14 @@ class CustomComponentImplementation(Connectable):
         return '{}{}][{}{}'.format(
             first, self.name, self.ttype, second
         )
+
+    def live(self):
+        if self.lived:
+            return self
+
+        self.lived = True
+        assert self.graph
+        for thing in self.graph.values():
+            thing.live()
+
+        return self

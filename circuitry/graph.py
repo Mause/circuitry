@@ -33,6 +33,18 @@ class Graph():
         )
 
 
+from collections import UserDict
+
+
+class LivingGraph(UserDict):
+    @property
+    def graph(self):
+        return self
+
+    def live(self):
+        return self.graph.live()
+
+
 def build_graph(componentdeclaration, connector, base=None):
     graph = (base or {})  # a dict of top level components
 
@@ -51,7 +63,7 @@ def build_graph(componentdeclaration, connector, base=None):
             conn.from_jack, conn.to_jack, graph[conn.to_]
         )
 
-    return graph
+    return LivingGraph(graph)
 
 
 def classify_component(thing):
