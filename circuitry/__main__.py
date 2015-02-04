@@ -12,8 +12,7 @@ def render_header(header):
 
 
 def get_inst():
-    with open('sample_graph.cir') as fh:
-        return load_graph(fh.read()).build_instance()
+    return load_graph(filename='tests\\alu\\adder.cir').build_instance()
 
 
 def render_state(state):
