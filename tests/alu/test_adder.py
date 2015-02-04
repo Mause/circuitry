@@ -1,7 +1,8 @@
 import unittest
 from itertools import product, tee
 
-from ..utils import get_graph, build_pins, as_bin
+from ..utils import get_graph, build_pins
+from circuitry.util import as_bin, from_bin
 
 adder_cir = get_graph('alu/adder.cir')
 HalfAdder = adder_cir.get('half_adder')
