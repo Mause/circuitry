@@ -10,7 +10,7 @@ multiplexor4_selector = multiplexor_cir.get('multiplexor4_selector')
 multiplexor4 = multiplexor_cir.get('multiplexor4')
 multiplexor_1bit = multiplexor_cir.get('multiplexor_1bit')
 multiplexor_2bits = multiplexor_cir.get('multiplexor_2bits')
-
+decoder_2_to_4 = multiplexor_cir.get('decoder_2_to_4')
 
 TEMPLATE_1BIT = '''\
 
@@ -138,6 +138,21 @@ class TestMultiplexor(unittest.TestCase):
 
     def test_multiplexor4(self):
         multiplexor4('m4').live()
+
+    def test_decoder(self):
+        d1 = decoder_2_to_4('d1').live()
+
+        d1.set_plugs(s1=0, s2=0)
+        self.assertEqual(d1.get_outputs(), (1, 0, 0, 0))
+
+        d1.set_plugs(s1=0, s2=1)
+        self.assertEqual(d1.get_outputs(), (0, 1, 0, 0))
+
+        d1.set_plugs(s1=1, s2=0)
+        self.assertEqual(d1.get_outputs(), (0, 0, 1, 0))
+
+        d1.set_plugs(s1=1, s2=1)
+        self.assertEqual(d1.get_outputs(), (0, 0, 0, 1))
 
 if __name__ == '__main__':
     unittest.main()
