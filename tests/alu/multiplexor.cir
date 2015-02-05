@@ -102,22 +102,22 @@
 # this is used to transform two inputs into three outputs
 # so we can control the three switches on a 4 output multiplexor
 <multiplexor4_selector [s1,s2] [a,b,c]> {
-    [[not1,not2] not]
-    [[and01,and02,and03] and]
+    [decoder decoder_2_to_4]
 
-    self[s1] -> and01[a]
-    self[s2] -> not1[a]
-    not1[o] -> and01[b]
-    and01[o] -> self[b]
+    self[[s1,s2]] -> decoder[[s1,s2]]
 
-    self[s1] -> not2[a]
-    self[s2] -> and02[a]
-    not2[o] -> and02[b]
-    and02[o] -> self[a]
+    # (0, 0, 0)
+    # decoder[a] does nothing; default selection on multiplexor
 
-    self[[s1,s2]] -> and03[[a,b]]
-    and03[o] -> self[a]
-    and03[o] -> self[c]
+    # (1, 0, 0)
+    decoder[b] -> self[a]
+
+    # (0, 1, 0)
+    decoder[c] -> self[b]
+
+    # (1, 0, 1)
+    decoder[d] -> self[a]
+    decoder[d] -> self[c]
 }
 
 
