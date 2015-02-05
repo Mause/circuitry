@@ -22,6 +22,8 @@ def get_pos(pos, instring):
 
 
 def as_bin(i, bits=8):
+    i = int(i) if isinstance(i, str) else i
+
     i = bin(i)[2:].rjust(bits, '0')
     return tuple(map(int, i))
 
