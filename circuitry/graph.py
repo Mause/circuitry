@@ -1,4 +1,3 @@
-from itertools import groupby
 from collections import UserDict
 
 from .connectable_registry import ConnectableRegistry

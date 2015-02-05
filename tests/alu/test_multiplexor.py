@@ -120,7 +120,6 @@ class TestMultiplexor(unittest.TestCase):
 
     def test_multiplexor4_selector(self):
         sel = multiplexor4_selector('sel').live()
-        sel.reset_state()
 
         sel.set_plugs(s1=1, s2=1)
 
