@@ -1,16 +1,31 @@
 [adder [] []]
 
 
+<sixteen_bit_adder [a1,b1,c1,d1,e1,f1,g1,h1,i1,j1,k1,l1,m1,n1,o1,p1,
+                    a2,b2,c2,d2,e2,f2,g2,h2,i2,j2,k2,l2,m2,n2,o2,p2,cin]
+                   [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,carry]> {
+    [[adder1,adder2] eight_bit_adder]
 
+    self[[a1,b1,c1,d1,e1,f1,g1,h1]] -> adder1[[a1,b1,c1,d1,e1,f1,g1,h1]]
+    self[[a2,b2,c2,d2,e2,f2,g2,h2]] -> adder1[[a2,b2,c2,d2,e2,f2,g2,h2]]
+    adder1[carry] -> self[carry]
 
+    self[[i1,j1,k1,l1,m1,n1,o1,p1]] -> adder2[[a1,b1,c1,d1,e1,f1,g1,h1]]
+    self[[i2,j2,k2,l2,m2,n2,o2,p2]] -> adder2[[a2,b2,c2,d2,e2,f2,g2,h2]]
+    adder2[carry] -> adder1[cin]
+
+    adder1[[a,b,c,d,e,f,g,h]] -> self[[a,b,c,d,e,f,g,h]]
+    adder2[[a,b,c,d,e,f,g,h]] -> self[[i,j,k,l,m,n,o,p]]
+}
 
 
 <eight_bit_adder [a1,b1,c1,d1,e1,f1,g1,h1,
-                  a2,b2,c2,d2,e2,f2,g2,h2]
+                  a2,b2,c2,d2,e2,f2,g2,h2,cin]
                  [a,b,c,d,e,f,g,h,carry]> {
     [[adder1, adder2, adder3, adder4, adder5, adder6, adder7, adder8] full_adder]
 
     # connect the carry lines of the adders
+    self[cin] -> adder1[cin]
     adder1[cout] -> adder2[cin]
     adder2[cout] -> adder3[cin]
     adder3[cout] -> adder4[cin]
