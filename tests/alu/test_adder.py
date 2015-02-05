@@ -1,9 +1,9 @@
 import unittest
 from itertools import product, tee
 
-from circuitry.util import as_bin, from_bin, get_graph, build_pins
+from circuitry.util import as_bin, from_bin, get_test_graph, build_pins
 
-adder_cir = get_graph('alu/adder.cir')
+adder_cir = get_test_graph('alu/adder.cir')
 HalfAdder = adder_cir.get('half_adder')
 FullAdder = adder_cir.get('full_adder')
 EightBitAdder = adder_cir.get('eight_bit_adder')

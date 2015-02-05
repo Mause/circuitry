@@ -1,8 +1,8 @@
 import unittest
 
-from circuitry.util import get_graph
+from circuitry.util import get_test_graph
 
-alu_cir = get_graph('alu/alu.cir')
+alu_cir = get_test_graph('alu/alu.cir')
 alu = alu_cir.get('alu')
 
 subtractor_cir = get_graph('alu/subtractor.cir')

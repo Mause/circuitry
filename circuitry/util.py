@@ -48,9 +48,13 @@ class TypeGetter:
         return lambda name: CustomComponentImplementation(name, component, [])
 
 
+def get_test_graph(filename):
+    return get_graph(join(HERE, filename))
+
+
 def get_graph(filename):
     from circuitry.graph import load_graph
-    return TypeGetter(load_graph(filename=join(HERE, filename)))
+    return TypeGetter(load_graph(filename=filename))
 
 
 def get_custom_component(filename, ttype):
