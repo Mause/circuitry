@@ -103,6 +103,7 @@
 # so we can control the three switches on a 4 output multiplexor
 <multiplexor4_selector [s1,s2] [a,b,c]> {
     [decoder decoder_2_to_4]
+    [or1 or]
 
     self[[s1,s2]] -> decoder[[s1,s2]]
 
@@ -110,14 +111,16 @@
     # decoder[a] does nothing; default selection on multiplexor
 
     # (1, 0, 0)
-    decoder[b] -> self[a]
+    decoder[b] -> or1[a]
 
     # (0, 1, 0)
     decoder[c] -> self[b]
 
     # (1, 0, 1)
-    decoder[d] -> self[a]
+    decoder[d] -> or1[b]
     decoder[d] -> self[c]
+
+    or1[o] -> self[a]
 }
 
 
