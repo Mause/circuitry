@@ -1,7 +1,7 @@
 import unittest
 from itertools import permutations
 
-from ..utils import get_graph, build_pins
+from circuitry.util import get_graph, build_pins
 
 multiplexor_cir = get_graph('alu\multiplexor.cir')
 

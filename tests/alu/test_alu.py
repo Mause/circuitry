@@ -1,6 +1,6 @@
 import unittest
 
-from ..utils import get_graph, as_bin, from_bin, build_pins
+from circuitry.util import get_graph
 
 alu_cir = get_graph('alu/alu.cir')
 alu = alu_cir.get('alu')
