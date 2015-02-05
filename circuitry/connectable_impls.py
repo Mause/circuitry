@@ -142,6 +142,11 @@ class ComponentDeclaration():
         self.pos = pos
         self.args = args
 
+    def __repr__(self):
+        return '<ComponentDeclaration[{}][{}] on line {}, column {}>'.format(
+            self.name, self.ttype, self.pos.line, self.pos.column
+        )
+
     def resolve_implementation(self):
         registry = ConnectableRegistry.instance().registry
 
