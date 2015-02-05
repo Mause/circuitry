@@ -42,6 +42,10 @@ class Connectable():
         return tuple(self.state[key] for key in self.valid_outputs)
 
     def get_inputs(self, keys=None):
+        '''
+        By default, returns a tuple of all the inputs for the component,
+        in the order they are specified. Otherwise, by the keys argument.
+        '''
         keys = keys or self.valid_inputs
         return tuple(self.state[key] for key in keys)
 
