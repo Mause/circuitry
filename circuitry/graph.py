@@ -1,4 +1,5 @@
 from itertools import groupby
+from collections import UserDict
 
 from .connectable_registry import ConnectableRegistry
 from .graph_parser_pp import parse as parse_pp
@@ -33,9 +34,6 @@ class Graph():
             self.componentdeclaration,
             self.connector
         )
-
-
-from collections import UserDict
 
 
 class LivingGraph(UserDict):
