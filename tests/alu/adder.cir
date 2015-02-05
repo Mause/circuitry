@@ -1,18 +1,9 @@
 [adder [] []]
 
-[[input1, input2] header]
-[output header]
 
-[adder1 eight_bit_adder]
 
-# connect the first input
-input1[[pin7,pin6,pin5,pin4,pin3,pin2,pin1,pin0]] -> adder1[[a1,b1,c1,d1,e1,f1,g1,h1]]
 
-# connect the second input
-input2[[pin7,pin6,pin5,pin4,pin3,pin2,pin1,pin0]] -> adder1[[a1,b1,c1,d1,e1,f1,g1,h1]]
 
-# connect the output lines
-adder1[[a,b,c,d,e,f,g,h]] -> output[[pin7,pin6,pin5,pin4,pin3,pin2,pin1,pin0]]
 
 <eight_bit_adder [a1,b1,c1,d1,e1,f1,g1,h1,
                   a2,b2,c2,d2,e2,f2,g2,h2]
