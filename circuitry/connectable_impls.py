@@ -1,5 +1,5 @@
 from . import gates
-from .util import as_bin, from_bin
+from .util import Pos, as_bin, from_bin
 from .connectable import Connectable
 from .connectable_registry import ConnectableRegistry
 from .exceptions import NoSuchComponentType
@@ -39,7 +39,7 @@ class HeaderConnectable(Connectable):
 
 class HasDynamicStateMixin:
     def calc_state(self):
-        raise NotImplementedError()
+        raise NotImplementedError(self)
 
     def set_plug(self, plug, state):
         assert plug in self.valid_inputs
@@ -49,6 +49,7 @@ class HasDynamicStateMixin:
         super().set_plug(plug, state)
 
         new_state = self.calc_state()
+        assert isinstance(old_state, int) and isinstance(new_state, int)
         if old_state != new_state:
             super().set_plug('o', new_state)
 
@@ -135,6 +136,10 @@ class ComponentDeclaration():
         self.ttype = ttype
         self.pos = pos
         self.args = args
+        assert isinstance(name, str)
+        assert isinstance(ttype, str)
+        assert isinstance(pos, Pos)
+        assert isinstance(args, list)
 
     def __repr__(self):
         return '<ComponentDeclaration[{}][{}] on line {}, column {}>'.format(
