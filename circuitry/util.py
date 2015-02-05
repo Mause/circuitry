@@ -1,8 +1,8 @@
+import string
 from os.path import join, dirname
 
 from collections import namedtuple
 
-ALPHA_8BIT = 'abcdefgh'
 HERE = join(dirname(__file__), '..', 'tests')
 
 Pos = namedtuple('Pos', 'line,column')
@@ -21,8 +21,9 @@ def get_pos(pos, instring):
     return Pos(line, column)
 
 
-def as_bin(i):
-    return tuple(map(int, bin(i)[2:].rjust(8, '0')))
+def as_bin(i, bits=8):
+    i = bin(i)[2:].rjust(bits, '0')
+    return tuple(map(int, i))
 
 
 def from_bin(i):
@@ -63,6 +64,9 @@ class StateDict(UserDict):
 
 
 def build_pins(num, binary):
-    pins = ['{}{}'.format(l, num) for l in ALPHA_8BIT]
+    pins = [
+        '{}{}'.format(l, num)
+        for l in string.ascii_letters[:26]
+    ]
 
     return dict(zip(pins, binary))
