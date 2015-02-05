@@ -10,11 +10,21 @@ EightBitAdder = adder_cir.get('eight_bit_adder')
 
 
 def half(a, b):
-    return HalfAdder('ha').set_plugs(a=a, b=b).get_outputs()
+    return (
+        HalfAdder('ha')
+        .live()
+        .set_plugs(a=a, b=b)
+        .get_outputs()
+    )
 
 
 def full(a, b, cin):
-    return FullAdder('adder').set_plugs(a=a, b=b, cin=cin).get_outputs()[::-1]
+    return (
+        FullAdder('adder')
+        .live()
+        .set_plugs(a=a, b=b, cin=cin)
+        .get_outputs()[::-1]
+    )
 
 
 
