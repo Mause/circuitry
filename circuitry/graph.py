@@ -4,6 +4,8 @@ from .connectable_registry import ConnectableRegistry
 from .graph_parser_pp import parse as parse_pp
 from .exceptions import NoSuchComponentInScope
 
+import pyparsing
+
 
 class Graph():
     def __init__(self, connector=None, customcomponent=None,
@@ -95,7 +97,17 @@ def load_graph(*, filename, graph=None):
         with open(filename) as fh:
             graph = fh.read()
 
-    top_level = sort_graph(parse_pp(graph))
+    try:
+        q = parse_pp(graph)
+    except pyparsing.ParseException as e:
+        raise pyparsing.ParseException(
+            pstr=e.pstr,
+            loc=e.loc,
+            msg='{} in file {}'.format(e.msg, filename),
+            elem=e.parserElement
+        ) from None
+
+    top_level = sort_graph(q)
 
     for cus_comp in top_level['customcomponent']:
         cus_comp.graph = sort_graph(cus_comp.contents)
