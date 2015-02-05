@@ -1,5 +1,5 @@
-
 from . import gates
+from .util import as_bin, from_bin
 from .connectable import Connectable
 from .connectable_registry import ConnectableRegistry
 from .exceptions import NoSuchComponentType
@@ -30,17 +30,11 @@ class HeaderConnectable(Connectable):
         self.set_plug(self.get_pin_name(i), state)
 
     def get_num(self):
-        bits = map(self.get_pin, range(self.bits))
-        bits = map(str, bits)
-
-        return int(''.join(bits), 2)
+        return from_bin(self.get_outputs()[::-1])
 
     def set_num(self, num):
-        for i in range(self.bits):
-            q = (num >> i) & 1
-            assert q in {0, 1}
-
-            self.set_pin(i, q)
+        for idx, i in enumerate(as_bin(num)):
+            self.set_pin(idx, i)
 
 
 class HasDynamicStateMixin:
