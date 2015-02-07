@@ -103,6 +103,10 @@ class NotConnectable(HasDynamicStateMixin, Connectable):
     valid_inputs = ['a']
     valid_outputs = ['o']
 
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        self.lived = False
+
     def calc_state(self):
         return int(not self.state['a'])
 
@@ -110,11 +114,13 @@ class NotConnectable(HasDynamicStateMixin, Connectable):
         return '(~{a} = {o})'.format_map(self.state)
 
     def live(self):
-        Connectable.set_plug(
-            self,
-            'o',
-            self.calc_state()
-        )
+        if not self.lived:
+            self.lived = True
+            Connectable.set_plug(
+                self,
+                'o',
+                self.calc_state()
+            )
         return self
 
 
