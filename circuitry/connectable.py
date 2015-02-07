@@ -71,7 +71,7 @@ class Connectable():
 
         # use a try-except, as this will never happen during normal operation
         try:
-            self.connections[plug]
+            conns = self.connections[plug]
         except KeyError:
             raise NoSuchPlug(
                 plug,
@@ -79,7 +79,7 @@ class Connectable():
                 self.ttype
             )
 
-        for conn in self.connections[plug]:
+        for conn in conns:
             conn.cable.set_plug(conn.plug, state)
 
         self.state[plug] = state
