@@ -69,6 +69,9 @@ class Connectable():
 
     def set_plug(self, plug, state):
         assert state in {0, 1}
+        # we can't assert that this component has been brought to life, as
+        # this set_plug call may have been made doing so.
+        # assert self.lived, self
 
         # use a try-except, as this will never happen during normal operation
         try:

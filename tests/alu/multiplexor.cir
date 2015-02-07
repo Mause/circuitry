@@ -99,6 +99,9 @@
 # so we can control the three switches on a 4 output multiplexor
 <multiplexor4_selector [s1,s2] [a,b,c]> {
     [decoder decoder_2_to_4]
+
+    # because of an implementation (optimisation) detail, we can't simply
+    # connect to something twice, we must connect them with or gates
     [or1 or]
 
     self[[s1,s2]] -> decoder[[s1,s2]]

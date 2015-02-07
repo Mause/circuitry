@@ -8,6 +8,12 @@ import pyparsing
 
 
 class Graph():
+    '''
+    This is the external interface for the entire program.
+
+    @param component: the root level customcomponent.
+    '''
+
     def __init__(self, connector=None, customcomponent=None,
                  componentdeclaration=None):
         self.connector = connector or []
@@ -108,6 +114,8 @@ def load_graph(*, filename, graph=None):
 
     for cus_comp in top_level['customcomponent']:
         cus_comp.graph = sort_graph(cus_comp.contents)
+        # this line severly cripples the import mechanism, by making every
+        # component loaded essentially global
         ConnectableRegistry.register(cus_comp)
 
     return Graph(**top_level)
