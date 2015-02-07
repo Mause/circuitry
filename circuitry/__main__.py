@@ -1,63 +1,37 @@
-from .graph import load_graph
+import argparse
+from functools import reduce
 
+from circuitry.util import get_test_graph, build_pins, as_bin, from_bin
 
-def render_header(header):
-    return ''.join(map(
-        str,
-        (
-            header.get_pin(i)
-            for i in range(header.bits)
-        )
-    ))
-
-
-def get_inst():
-    return load_graph(filename='tests\\alu\\adder.cir').build_instance()
-
-
-def render_state(state):
-    return ' '.join(
-        '{}:{}'.format(k, v)
-        for k, v in sorted(state.items())
-    )
-
-
-def render_external_state(inst):
-    in1, in2, out = (
-        render_header(inst['input1']),
-        render_header(inst['input2']),
-        render_header(inst['output'])
-    )
-
-    print(
-        in1, '+', in2, '=', out, '|',
-        int(in1, 2), '+', int(in2, 2), '=', int(out, 2)
-    )
-    input()
+adder_cir = get_test_graph('alu\\adder.cir')
+sixteen_bit_adder = adder_cir.get('sixteen_bit_adder')
 
 
 def main():
-    inst = get_inst()
+    inst = sixteen_bit_adder('inst').live()
 
-    # num1, num2 = 255, 255
-    # bnum1, bnum2 = split(num1), split(num2)
+    def set_plugs(i, d):
+        pins = build_pins(i, as_bin(d, 16))
+        assert len(pins) <= 16, (
+            'Only supports up to sixteen bit numbers thus far'
+        )
+        inst.set_plugs(**pins)
 
-    from itertools import product
+    def add(a, b):
+        set_plugs(1, a)
+        set_plugs(2, b)
+        return from_bin(inst.get_outputs('abcdefghijklmnop'))
 
-    for a, b in product(range(10), range(10)):
-        inst['input1'].set_num(a)
-        inst['input2'].set_num(b)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'ints',
+        type=int,
+        action='append',
+        nargs='+'
+    )
 
-        assert (a + b) == inst['output'].get_num()
-
-        # render_external_state(inst)
-
-    # for i in range(1, 9):
-    #     key = 'adder{}'.format(i)
-    #     values = render_state(inst[key].state)
-    #     print('{}: {}'.format(key, values))
-
-    # print(render_state(inst['output'].state))
+    ints = parser.parse_args().ints[0]
+    print(reduce(add, ints))
 
 
 if __name__ == '__main__':
