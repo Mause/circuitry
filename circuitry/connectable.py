@@ -38,8 +38,9 @@ class Connectable():
             0
         )
 
-    def get_outputs(self):
-        return tuple(self.state[key] for key in self.valid_outputs)
+    def get_outputs(self, keys=None):
+        keys = keys or self.valid_outputs
+        return tuple(self.state[key] for key in keys)
 
     def get_inputs(self, keys=None):
         '''
